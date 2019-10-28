@@ -2,7 +2,9 @@ package dbops
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
+	"time"
 )
 
 // 过程：init(dblogin, truncate tables)->run tests->clear data(truncate tables)
@@ -56,5 +58,83 @@ func testRegetUser(t *testing.T) {
 	}
 	if pwd != "" {
 		t.Errorf("Deleting user test failed")
+	}
+}
+
+// 视频功能测试
+var tempvid string
+
+func TestVideoWorkFlow(t *testing.T) {
+	clearTables()
+	t.Run("PrepareUser", testAddUser)
+	t.Run("AddVideo", testAddVideoInfo)
+	t.Run("GetVideo", testGetVideoInfo)
+	t.Run("DelVideo", testDeleteVideoInfo)
+	t.Run("RegetVideo", testRegetVideoInfo)
+}
+
+func testAddVideoInfo(t *testing.T) {
+	vi, err := AddNewVideo(1, "my-video")
+	if err != nil {
+		t.Errorf("Error of AddVideoInfo: %v", err)
+	}
+	tempvid = vi.Id
+}
+
+func testGetVideoInfo(t *testing.T) {
+	info, err := GetVideoInfo(tempvid)
+	if err != nil {
+		t.Errorf("Error of getVideoInfo: %v", err)
+	}
+	if info.Name != "my-video" {
+		t.Error("Error of getVideoInfo: content not correct")
+	}
+}
+
+func testDeleteVideoInfo(t *testing.T) {
+	err := DeleteVideoInfo(tempvid)
+	if err != nil {
+		t.Errorf("Error of DeleteVideoInfo: %v", err)
+	}
+}
+
+func testRegetVideoInfo(t *testing.T) {
+	info, err := GetVideoInfo(tempvid)
+	if err != nil {
+		t.Errorf("Error of RegetUser: %v", err)
+	}
+	if info != nil {
+		t.Errorf("Deleting user test failed")
+	}
+}
+
+// 评论功能测试
+
+func TestComments(t *testing.T) {
+	clearTables()
+	t.Run("AddUser", testAddUser)
+	t.Run("AddVideo", testAddVideoInfo)
+	t.Run("AddComments", testAddComments)
+	t.Run("ListComments", testListComments)
+}
+
+func testAddComments(t *testing.T) {
+	err := AddNewComments(tempvid, 1, "respect this video")
+	if err != nil {
+		t.Errorf("Error of AddNewComments: %v", err)
+	}
+}
+
+func testListComments(t *testing.T) {
+	vid := tempvid
+	from := 1514764800
+	to, _ := strconv.Atoi(strconv.FormatInt(time.Now().UnixNano()/1000000000, 10))
+	res, err := ListComments(vid, from, to)
+	if err != nil {
+		t.Errorf("Error of ListComments: %v", err)
+	}
+
+	for i, ele := range res {
+		fmt.Printf("comment: %d, %v \n", i, ele)
 	}
 }

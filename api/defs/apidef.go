@@ -6,10 +6,23 @@ type UserCredential struct {
 	Pwd      string `json:"pwd`
 }
 
-// Data model
+// Video info model
 type VideoInfo struct {
 	Id           string
 	AuthorId     int
 	Name         string
 	DisplayCtime string
+}
+
+// Comment info model
+type Comment struct {
+	Id      string
+	VideoId string
+	Author  string
+	Content string
+}
+
+type SimpleSession struct {
+	Username string
+	TTL      int64
 }
