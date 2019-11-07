@@ -19,7 +19,6 @@ func NewMiddleWareHandler(r *httprouter.Router) http.Handler {
 func (m *middlewareHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// check session
 	validateUserSession(r)
-	// resp, err := http.Get("http://www.baidu.com")
 	m.r.ServeHTTP(w, r)
 }
 
