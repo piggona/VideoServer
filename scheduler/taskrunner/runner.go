@@ -15,7 +15,7 @@ func NewRunner(size int, longlived bool, d fn, e fn) *Runner {
 		Controller: make(chan string, 1), // 非阻塞channel
 		Error:      make(chan string, 1),
 		Data:       make(chan interface{}, size),
-		longLived:  longlived,
+		longLived:  longlived, // channel需要异步执行，不释放
 		dataSize:   size,
 		Dispatcher: d,
 		Executor:   e,
