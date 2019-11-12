@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"video_server/api/session"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -22,6 +23,9 @@ func (m *middlewareHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	m.r.ServeHTTP(w, r)
 }
 
+// 业务功能：
+// upload,logout,ListVideos,ShowComments,PostComment,DeleteVideo
+
 func RegisterHandlers() *httprouter.Router {
 	router := httprouter.New()
 
@@ -29,10 +33,25 @@ func RegisterHandlers() *httprouter.Router {
 
 	router.POST("/user/:user_name", Login)
 
+	// router.POST("/user/:username/videos", AddNewVideo)
+
+	// router.GET("/user/:username/videos", ListAllVideos)
+
+	// router.DELETE("/user/:username/videos/:vid-id", DeleteVideo)
+
+	// router.POST("/videos/:vid-id/comments", PostComment)
+
+	// router.GET("/videos/:vid-id/comments", ShowComments)
+
 	return router
 }
 
+func Prepare() {
+	session.LoadSessionsFromDB()
+}
+
 func main() {
+	Prepare()
 	r := RegisterHandlers()
 	m := NewMiddleWareHandler(r)
 	http.ListenAndServe("localhost:8000", m)

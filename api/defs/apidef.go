@@ -12,6 +12,11 @@ type SignedUp struct {
 	SessionId string `json:"session_id"`
 }
 
+type SignedIn struct {
+	Success   bool   `json:"success"`
+	SessionId string `json:"sessionId"`
+}
+
 // Video info model
 type VideoInfo struct {
 	Id           string

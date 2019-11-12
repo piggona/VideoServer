@@ -1,7 +1,9 @@
 package main
 
 type ApiBody struct {
-	Url     string `json:"url"`
+	Url string `json:"url"`
+	// Url, 此处的Url应当是一个服务器的代号或子域名，
+	// 然后也许在执行request函数的过程中需要再执行判断一次,在后端得到最终访问的明确url
 	Method  string `json:"method"`
 	ReqBody string `json:"req_body"`
 }
